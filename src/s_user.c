@@ -1584,7 +1584,11 @@ m_message(aClient *cptr, aClient *sptr, int parc, char *parv[], int notice)
             /* servers and super sources get free sends */
             if (IsClient(sptr) && !IsULine(sptr))
             {
-                if ((ret = (can_send(sptr, chptr, parv[2]) || (can_send(sptr, chptr, parv[2]) && notice))))
+                ret = can_send(sptr, chptr, parv[2]);
+                /* condition checking verified using karnaugh map
+                 * explanation shall come soon -dboyz
+                 */
+                if(!(!ret || ((ret == MODE_NONOTICE) && !notice)))
                 {
                     if (ismine && !notice)
                         send_msg_error(sptr, parv, target, ret);
